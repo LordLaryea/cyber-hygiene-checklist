@@ -1,0 +1,35 @@
+# 🛡️ Cyber Hygiene Checklist Web App
+
+This is a simple and user-friendly web application designed to help users practice good **cyber hygiene** every day. Built with **HTML, CSS, and JavaScript**, it includes a login page, daily tips, and weekly reminders.
+
+## 🚀 Features
+
+- 🔐 Login Page
+- 📋 Daily Checklist Dashboard
+- 📅 Weekly Cyber Hygiene Reminders
+- 🌗 Dark Mode
+- 💪 Password Strength Checker
+- 🧠 Tip of the Day (rotates daily)
+
+## 🎯 Goal
+
+To promote consistent and easy-to-follow cybersecurity habits, especially for beginners and students.
+
+## 🛠️ Built With
+
+- HTML
+- CSS
+- JavaScript
+- GitHub Pages (for hosting)
+
+## 🔗 Live Site
+
+👉 [Click here to view the site](https://lordlaryea.github.io/cyber-hygiene-checklist/)
+
+## ✍️ Author
+
+**Lord Laryea**
+
+---
+
+*Stay safe online!* 🌐🧠
