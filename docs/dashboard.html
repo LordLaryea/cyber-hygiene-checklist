@@ -1,10 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>CyberHygiene Dashboard</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter&family=Roboto&family=Ubuntu&family=Orbitron&family=Open+Sans&family=Poppins&family=Lato&family=Montserrat&family=Raleway&family=Merriweather&family=Playfair+Display&family=Bebas+Neue&family=Nunito&family=Quicksand&family=Work+Sans&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter&family=Roboto&family=Ubuntu&family=Orbitron&family=Poppins&family=Montserrat&family=Lato&family=Nunito&family=Raleway&family=Merriweather&family=Quicksand&family=Fira+Sans&family=PT+Sans&family=DM+Sans&family=Anton&family=Dancing+Script&family=Open+Sans&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg-light: #f4f4f4;
@@ -12,7 +11,6 @@
       --accent: #00ffc3;
       --card-light: #ffffff;
     }
-
     html, body {
       margin: 0;
       padding: 0;
@@ -22,7 +20,6 @@
       background: var(--bg-light);
       color: var(--text-light);
     }
-
     .container {
       max-width: 600px;
       height: 100%;
@@ -34,40 +31,18 @@
       justify-content: flex-start;
       overflow-y: auto;
     }
-
     header {
       text-align: center;
-      margin-bottom: 10px;
+      margin-bottom: 20px;
     }
-
     h1 {
       font-size: 2em;
       color: var(--accent);
     }
-
-    .profile-header {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      margin-bottom: 10px;
-    }
-
-    #avatarPreview {
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      object-fit: cover;
-    }
-
-    .buttons {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      justify-content: space-between;
+    .settings-btn {
+      text-align: right;
       margin-top: 10px;
     }
-
     .settings-panel {
       display: none;
       margin-top: 10px;
@@ -75,39 +50,53 @@
       border-radius: 12px;
       padding: 15px;
     }
-
     .settings-panel input, .settings-panel select {
       width: 100%;
       margin-bottom: 10px;
       padding: 8px;
     }
-
+    #avatarPreview {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+    .profile-header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
     .tip-box, .checklist, .score-box {
       background: var(--card-light);
       border-radius: 12px;
       padding: 15px;
       margin-top: 20px;
     }
-
     .checklist ul {
       padding-left: 0;
       list-style: none;
     }
-
     .progress-bar {
       background: #ccc;
       border-radius: 10px;
       overflow: hidden;
       margin-top: 10px;
     }
-
     .progress-fill {
       height: 20px;
       width: 0;
       background: red;
       transition: width 0.3s;
     }
-
+    .buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 20px;
+      justify-content: space-between;
+    }
     button {
       padding: 10px;
       background: var(--accent);
@@ -117,12 +106,10 @@
       border-radius: 8px;
       cursor: pointer;
     }
-
-    .top-controls {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-top: 10px;
+    #countdownBox {
+      margin-top: 15px;
+      font-weight: bold;
+      color: green;
     }
   </style>
 </head>
@@ -134,67 +121,65 @@
         <img id="avatarPreview" src="https://i.imgur.com/DPzUj7F.png" alt="Avatar">
         <span id="userName">User</span>
       </div>
-    </header>
+    </header><div class="buttons">
+  <button onclick="location.href='quiz.html'">🧠 Take Quiz</button>
+  <button onclick="refreshChecklist()">🔄 Refresh Tasks</button>
+  <button onclick="toggleSettings()">⚙️ Settings</button>
+</div>
 
-    <div class="top-controls">
-      <button onclick="refreshChecklist()">🔄 Refresh Tasks</button>
-      <button onclick="toggleSettings()">⚙️ Settings</button>
-    </div>
+<div class="settings-panel" id="settingsPanel">
+  <input type="text" id="newUsername" placeholder="Change Username">
+  <input type="password" id="newPassword" placeholder="Change Password">
+  <input type="file" id="avatarInput" accept="image/*">
 
-    <div class="settings-panel" id="settingsPanel">
-      <input type="text" id="newUsername" placeholder="Change Username">
-      <input type="password" id="newPassword" placeholder="Change Password">
-      <input type="file" id="avatarInput" accept="image/*">
+  <label>Font Style:</label>
+  <select id="fontStyle">
+    <option value="Inter">Inter</option>
+    <option value="Roboto">Roboto</option>
+    <option value="Ubuntu">Ubuntu</option>
+    <option value="Orbitron">Orbitron</option>
+    <option value="Poppins">Poppins</option>
+    <option value="Montserrat">Montserrat</option>
+    <option value="Lato">Lato</option>
+    <option value="Nunito">Nunito</option>
+    <option value="Raleway">Raleway</option>
+    <option value="Merriweather">Merriweather</option>
+    <option value="Quicksand">Quicksand</option>
+    <option value="Fira Sans">Fira Sans</option>
+    <option value="PT Sans">PT Sans</option>
+    <option value="DM Sans">DM Sans</option>
+    <option value="Anton">Anton</option>
+    <option value="Dancing Script">Dancing Script</option>
+    <option value="Open Sans">Open Sans</option>
+  </select>
 
-      <label>Font Style:</label>
-      <select id="fontStyle">
-        <option value="'Inter', sans-serif">Inter</option>
-        <option value="'Roboto', sans-serif">Roboto</option>
-        <option value="'Ubuntu', sans-serif">Ubuntu</option>
-        <option value="'Orbitron', sans-serif">Orbitron</option>
-        <option value="'Open Sans', sans-serif">Open Sans</option>
-        <option value="'Poppins', sans-serif">Poppins</option>
-        <option value="'Lato', sans-serif">Lato</option>
-        <option value="'Montserrat', sans-serif">Montserrat</option>
-        <option value="'Raleway', sans-serif">Raleway</option>
-        <option value="'Merriweather', serif">Merriweather</option>
-        <option value="'Playfair Display', serif">Playfair Display</option>
-        <option value="'Bebas Neue', cursive">Bebas Neue</option>
-        <option value="'Nunito', sans-serif">Nunito</option>
-        <option value="'Quicksand', sans-serif">Quicksand</option>
-        <option value="'Work Sans', sans-serif">Work Sans</option>
-      </select>
+  <label>Font Color:</label>
+  <input type="color" id="fontColor" value="#111111">
 
-      <label>Font Color:</label>
-      <input type="color" id="fontColor" value="#111111">
+  <label>Font Size:</label>
+  <input type="range" id="fontSize" min="12" max="24" value="16">
 
-      <label>Font Size:</label>
-      <input type="range" id="fontSize" min="12" max="28" value="16">
+  <button onclick="saveSettings()">💾 Save Settings</button>
+</div>
 
-      <button onclick="saveSettings()">💾 Save Settings</button>
-    </div>
+<div class="tip-box">
+  <strong>💡 Tip of the Day:</strong>
+  <p id="tipText">Loading...</p>
+</div>
 
-    <div class="tip-box">
-      <strong>💡 Tip of the Day:</strong>
-      <p id="tipText">Loading...</p>
-    </div>
+<div class="checklist">
+  <h3>Today's Checklist</h3>
+  <ul id="taskList"></ul>
+  <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+  <button onclick="markChecklistDone()">✅ Done</button>
+  <div id="countdownBox"></div>
+</div>
 
-    <div class="checklist">
-      <h3>Today's Checklist</h3>
-      <ul id="taskList"></ul>
-      <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
-    </div>
+<div class="score-box">
+  🎯 Quiz Score: <span id="score">0</span>/5
+</div>
 
-    <div class="score-box">
-      🎯 Quiz Score: <span id="score">0</span>/5
-    </div>
-
-    <div class="buttons">
-      <button onclick="location.href='quiz.html'">🧠 Take Quiz</button>
-    </div>
-  </div>
-
-  <script>
+  </div>  <script>
     const tips = [
       "Avoid suspicious links.",
       "Use strong passwords.",
@@ -229,20 +214,15 @@
         localStorage.setItem("user", newUser);
         document.getElementById("userName").textContent = newUser;
       }
-
       if (newPass) {
         localStorage.setItem("password", newPass);
         alert("Password changed. Please log in again.");
         window.location.href = "index.html";
       }
 
-      document.body.style.fontFamily = font;
+      document.body.style.fontFamily = `'${font}', sans-serif`;
       document.body.style.color = color;
       document.body.style.fontSize = size + "px";
-
-      localStorage.setItem("fontStyle", font);
-      localStorage.setItem("fontColor", color);
-      localStorage.setItem("fontSize", size);
     }
 
     function refreshChecklist() {
@@ -254,7 +234,7 @@
       const list = dailyTasks[day];
       const taskList = document.getElementById("taskList");
       taskList.innerHTML = "";
-      list.forEach((task) => {
+      list.forEach((task, index) => {
         const li = document.createElement("li");
         li.innerHTML = `<label><input type='checkbox' onchange='updateProgress()'> ${task}</label>`;
         taskList.appendChild(li);
@@ -271,9 +251,28 @@
       fill.style.background = percent < 34 ? "red" : percent < 67 ? "orange" : "limegreen";
     }
 
-    function showTip() {
-      const tip = tips[Math.floor(Math.random() * tips.length)];
-      document.getElementById("tipText").textContent = tip;
+    function markChecklistDone() {
+      const now = Date.now();
+      localStorage.setItem("lastChecklistTime", now);
+      updateCountdown();
+    }
+
+    function updateCountdown() {
+      const last = localStorage.getItem("lastChecklistTime");
+      if (!last) return;
+      const diff = 86400000 - (Date.now() - Number(last));
+      const box = document.getElementById("countdownBox");
+
+      if (diff > 0) {
+        const hours = Math.floor(diff / 3600000);
+        const minutes = Math.floor((diff % 3600000) / 60000);
+        const seconds = Math.floor((diff % 60000) / 1000);
+        box.textContent = `⏳ Next checklist in ${hours}h ${minutes}m ${seconds}s`;
+        setTimeout(updateCountdown, 1000);
+      } else {
+        box.textContent = "✅ You can now check today's checklist!";
+        localStorage.removeItem("lastChecklistTime");
+      }
     }
 
     document.getElementById("avatarInput").addEventListener("change", function (e) {
@@ -294,13 +293,12 @@
       const avatar = localStorage.getItem("userAvatar");
       if (avatar) document.getElementById("avatarPreview").src = avatar;
 
-      const savedFont = localStorage.getItem("fontStyle");
-      const savedColor = localStorage.getItem("fontColor");
-      const savedSize = localStorage.getItem("fontSize");
+      updateCountdown();
+    }
 
-      if (savedFont) document.body.style.fontFamily = savedFont;
-      if (savedColor) document.body.style.color = savedColor;
-      if (savedSize) document.body.style.fontSize = savedSize + "px";
+    function showTip() {
+      const tip = tips[Math.floor(Math.random() * tips.length)];
+      document.getElementById("tipText").textContent = tip;
     }
 
     window.onload = function () {
@@ -308,6 +306,5 @@
       renderChecklist();
       loadUser();
     };
-  </script>
-</body>
+  </script></body>
 </html>
