@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Create Account - Personal Cyber Hygiene</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: #f0f4f8;
+      height: 100vh;
+      overflow: hidden;
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #111;
+    }
+
+    body::before {
+      content: "";
+      position: absolute;
+      width: 200%;
+      height: 200%;
+      background: repeating-radial-gradient(circle at center, rgba(0, 255, 200, 0.05), transparent 50px);
+      animation: moveGrid 60s linear infinite;
+      z-index: 0;
+    }
+
+    @keyframes moveGrid {
+      0% { transform: rotate(0deg) scale(1); }
+      100% { transform: rotate(360deg) scale(1.2); }
+    }
+
+    .create-box {
+      position: relative;
+      z-index: 1;
+      background: rgba(255, 255, 255, 0.95);
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 15px #00ffc3;
+      width: 340px;
+      text-align: center;
+    }
+
+    h2 {
+      margin-bottom: 15px;
+      color: #00bfa6;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: 2px solid #ccc;
+      border-radius: 8px;
+      font-size: 1em;
+      transition: 0.3s;
+    }
+
+    input:focus {
+      border-color: #00ffc3;
+      outline: none;
+      background: #eafff8;
+    }
+
+    #passwordStrength {
+      font-size: 0.9em;
+      text-align: left;
+      margin: 5px 0;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: #00ffc3;
+      color: black;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    button:hover {
+      background-color: #00e6b8;
+    }
+
+    #avatarPreview {
+      width: 50px;
+      height: 50px;
+      object-fit: cover;
+      border-radius: 50%;
+      margin-top: 10px;
+    }
+
+    #errorMessage {
+      color: red;
+      font-size: 0.9em;
+      margin-top: 5px;
+    }
+
+    .shake {
+      animation: shake 0.4s;
+    }
+
+    @keyframes shake {
+      0% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      50% { transform: translateX(5px); }
+      75% { transform: translateX(-5px); }
+      100% { transform: translateX(0); }
+    }
+  </style>
+</head>
+<body>
+  <div class="create-box" id="createBox">
+    <h2>🔐 Create Account</h2>
+    <input type="text" id="newUsername" placeholder="Username" />
+    <input type="password" id="newPassword" placeholder="Password" oninput="checkStrength()" />
+    <div id="passwordStrength">Strength: </div>
+    <input type="password" id="confirmPassword" placeholder="Confirm Password" />
+    <input type="file" id="avatarInput" accept="image/*" />
+    <img id="avatarPreview" src="https://i.imgur.com/DPzUj7F.png" alt="Avatar Preview" />
+    <div id="errorMessage"></div>
+    <button onclick="createAccount()">Create Account</button>
+  </div>
+
+  <script>
+    const strengthText = document.getElementById("passwordStrength");
+    const errorMessage = document.getElementById("errorMessage");
+
+    function checkStrength() {
+      const pwd = document.getElementById("newPassword").value;
+      let strength = "Weak";
+      if (pwd.length >= 8 && /[A-Z]/.test(pwd) && /\d/.test(pwd)) strength = "Strong";
+      else if (pwd.length >= 6) strength = "Medium";
+      strengthText.textContent = "Strength: " + strength;
+      strengthText.style.color = strength === "Strong" ? "green" : strength === "Medium" ? "orange" : "red";
+    }
+
+    document.getElementById("avatarInput").addEventListener("change", function (e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        document.getElementById("avatarPreview").src = e.target.result;
+        localStorage.setItem("userAvatar", e.target.result);
+      };
+      reader.readAsDataURL(file);
+    });
+
+    function createAccount() {
+      const user = document.getElementById("newUsername").value.trim();
+      const pass = document.getElementById("newPassword").value;
+      const confirm = document.getElementById("confirmPassword").value;
+
+      if (!user || !pass || !confirm) {
+        return showError("All fields are required!");
+      }
+
+      if (pass !== confirm) {
+        return showError("Passwords do not match!");
+      }
+
+      localStorage.setItem("user", user);
+      localStorage.setItem("password", pass);
+      window.location.href = "index.html";
+    }
+
+    function showError(msg) {
+      const box = document.getElementById("createBox");
+      errorMessage.textContent = msg;
+      box.classList.remove("shake");
+      void box.offsetWidth;
+      box.classList.add("shake");
+    }
+  </script>
+</body>
+</html>

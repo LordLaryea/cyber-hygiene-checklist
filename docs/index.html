@@ -3,11 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <title>Personal Cyber Hygiene - Login</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
   <style>
     body {
       margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f2f9ff;
+      font-family: 'Inter', sans-serif;
+      background: #f4f9ff;
       height: 100vh;
       display: flex;
       align-items: center;
@@ -24,11 +25,12 @@
       height: 200%;
       background: repeating-radial-gradient(
         circle at center,
-        rgba(0, 255, 200, 0.08),
+        rgba(0, 255, 200, 0.1),
         transparent 60px
       );
       animation: moveGrid 60s linear infinite;
       z-index: 0;
+      opacity: 0.3;
     }
 
     @keyframes moveGrid {
@@ -39,9 +41,9 @@
     .login-box {
       position: relative;
       z-index: 1;
-      background: rgba(255, 255, 255, 0.95);
+      background: rgba(255, 255, 255, 0.85);
       padding: 30px;
-      border-radius: 12px;
+      border-radius: 15px;
       box-shadow: 0 0 20px #00ffc3;
       width: 320px;
       text-align: center;
@@ -53,41 +55,42 @@
       margin-bottom: 20px;
     }
 
-    label {
-      display: none;
-    }
-
     input {
       width: 100%;
       padding: 12px;
       margin: 10px 0;
-      border: 1px solid #ccc;
+      border: 1px solid #00ffc3;
       border-radius: 5px;
+      background-color: rgba(255, 255, 255, 0.9);
+      color: #111;
       font-size: 1em;
-      transition: 0.3s;
     }
 
-    input:focus {
-      border: 1px solid #00bfa6;
-      box-shadow: 0 0 5px #00ffc3;
-      outline: none;
+    #strengthMessage {
+      font-size: 0.9em;
+      text-align: left;
+      margin-top: -8px;
+      margin-bottom: 8px;
     }
+
+    .weak { color: red; }
+    .medium { color: orange; }
+    .strong { color: green; }
 
     button {
       width: 100%;
       padding: 12px;
       background-color: #00ffc3;
-      color: black;
+      color: #111;
       font-weight: bold;
       border: none;
       cursor: pointer;
       border-radius: 5px;
       margin-top: 10px;
-      transition: transform 0.2s ease;
     }
 
-    button:active {
-      transform: scale(0.97);
+    button:hover {
+      background-color: #00e6b8;
     }
 
     .link-buttons {
@@ -101,21 +104,6 @@
       background: transparent;
       border: 1px solid #00bfa6;
       color: #00bfa6;
-      position: relative;
-    }
-
-    .link-buttons button:hover::after {
-      content: attr(title);
-      position: absolute;
-      bottom: -25px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: #111;
-      color: #00ffc3;
-      padding: 4px 8px;
-      border-radius: 4px;
-      font-size: 0.75em;
-      white-space: nowrap;
     }
 
     #errorMessage {
@@ -136,38 +124,19 @@
       75% { transform: translateX(-10px); }
       100% { transform: translateX(0); }
     }
-
-    .loading {
-      opacity: 0.7;
-      pointer-events: none;
-    }
-
-    .loading::after {
-      content: '⏳ Logging in...';
-      display: block;
-      margin-top: 8px;
-      color: #00bfa6;
-      font-size: 0.85em;
-    }
   </style>
 </head>
 <body>
   <div class="login-box" id="loginBox">
     <h1>🔐 Personal Cyber Hygiene</h1>
-
-    <label for="username">Username</label>
     <input type="text" id="username" placeholder="Username" />
-
-    <label for="password">Password</label>
-    <input type="password" id="password" placeholder="Password" />
-
+    <input type="password" id="password" placeholder="Password" oninput="checkStrength()" />
+    <div id="strengthMessage"></div>
     <p id="errorMessage">Incorrect username or password!</p>
-
-    <button id="loginBtn" onclick="login()">Login</button>
-
+    <button onclick="login()">Login</button>
     <div class="link-buttons">
-      <button onclick="forgotPassword()" title="Reset your password">Forgot Password?</button>
-      <button onclick="createAccount()" title="Create a new account">Create Account</button>
+      <button onclick="forgotPassword()">Forgot Password?</button>
+      <button onclick="createAccount()">Create Account</button>
     </div>
   </div>
 
@@ -179,23 +148,16 @@
       const storedPass = localStorage.getItem("password") || "admin";
 
       const box = document.getElementById("loginBox");
-      const button = document.getElementById("loginBtn");
       const message = document.getElementById("errorMessage");
 
       if (username === storedUser && password === storedPass) {
-        button.classList.add("loading");
-        setTimeout(() => {
-          localStorage.setItem("user", username);
-          window.location.href = "dashboard.html";
-        }, 1000);
+        localStorage.setItem("user", username);
+        window.location.href = "dashboard.html";
       } else {
         box.classList.remove("shake");
         void box.offsetWidth;
         box.classList.add("shake");
         message.style.display = "block";
-        setTimeout(() => {
-          message.style.display = "none";
-        }, 2500);
       }
     }
 
@@ -205,6 +167,35 @@
 
     function createAccount() {
       window.location.href = "create.html";
+    }
+
+    function checkStrength() {
+      const pass = document.getElementById("password").value;
+      const msg = document.getElementById("strengthMessage");
+
+      if (!pass) {
+        msg.textContent = "";
+        msg.className = "";
+        return;
+      }
+
+      const weak = /[a-z]/.test(pass) && pass.length < 6;
+      const medium = /[a-z]/.test(pass) && /[0-9]/.test(pass) && pass.length >= 6;
+      const strong = /[a-z]/.test(pass) && /[0-9]/.test(pass) && /[^a-zA-Z0-9]/.test(pass) && pass.length >= 8;
+
+      if (strong) {
+        msg.textContent = "Strength: Strong";
+        msg.className = "strong";
+      } else if (medium) {
+        msg.textContent = "Strength: Medium";
+        msg.className = "medium";
+      } else if (weak) {
+        msg.textContent = "Strength: Weak";
+        msg.className = "weak";
+      } else {
+        msg.textContent = "Strength: Very Weak";
+        msg.className = "weak";
+      }
     }
   </script>
 </body>
