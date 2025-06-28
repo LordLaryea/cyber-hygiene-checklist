@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Cyber Quiz</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      margin: 0;
+      padding: 20px;
+      color: #333;
+    }
+
+    .container {
+      max-width: 500px;
+      margin: auto;
+      background: #fff;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      text-align: center;
+      color: #1976d2;
+    }
+
+    .question {
+      margin: 20px 0;
+    }
+
+    .question p {
+      font-weight: bold;
+    }
+
+    label {
+      display: block;
+      margin: 6px 0;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: #1976d2;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+
+    button:hover {
+      background-color: #1565c0;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>🛡️ Cyber Hygiene Quiz</h2>
+
+    <form id="quizForm">
+      <div class="question">
+        <p>1. What’s the safest way to create passwords?</p>
+        <label><input type="radio" name="q0" value="a" /> Use your name</label>
+        <label><input type="radio" name="q0" value="b" /> Use a mix of characters and numbers</label>
+        <label><input type="radio" name="q0" value="c" /> Use only numbers</label>
+      </div>
+
+      <div class="question">
+        <p>2. What should you do before clicking an email link?</p>
+        <label><input type="radio" name="q1" value="a" /> Click quickly</label>
+        <label><input type="radio" name="q1" value="b" /> Hover to preview and verify sender</label>
+        <label><input type="radio" name="q1" value="c" /> Forward it to friends</label>
+      </div>
+
+      <div class="question">
+        <p>3. Why should you update software regularly?</p>
+        <label><input type="radio" name="q2" value="a" /> To waste space</label>
+        <label><input type="radio" name="q2" value="b" /> For better colors</label>
+        <label><input type="radio" name="q2" value="c" /> To fix bugs and protect from threats</label>
+      </div>
+
+      <div class="question">
+        <p>4. What’s a safe backup method?</p>
+        <label><input type="radio" name="q3" value="a" /> Save everything on desktop</label>
+        <label><input type="radio" name="q3" value="b" /> Use cloud or external drive</label>
+        <label><input type="radio" name="q3" value="c" /> Print it all</label>
+      </div>
+
+      <div class="question">
+        <p>5. What does antivirus software do?</p>
+        <label><input type="radio" name="q4" value="a" /> Decorates your screen</label>
+        <label><input type="radio" name="q4" value="b" /> Protects against malware</label>
+        <label><input type="radio" name="q4" value="c" /> Slows down your computer</label>
+      </div>
+
+      <button type="button" onclick="submitQuiz()">Submit Quiz</button>
+    </form>
+  </div>
+
+  <script>
+    const quizData = [
+      { answer: "b" },
+      { answer: "b" },
+      { answer: "c" },
+      { answer: "b" },
+      { answer: "b" }
+    ];
+
+    function submitQuiz() {
+      let score = 0;
+      quizData.forEach((q, i) => {
+        const selected = document.querySelector(`input[name="q${i}"]:checked`);
+        if (selected && selected.value === q.answer) {
+          score++;
+        }
+      });
+
+      // Save the score to localStorage
+      localStorage.setItem("quizScore", `${score}/${quizData.length}`);
+
+      alert(`🎉 You scored ${score} out of ${quizData.length}!`);
+      window.location.href = "dashboard.html";
+    }
+  </script>
+</body>
+</html>

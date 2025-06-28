@@ -1,157 +1,258 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Cyber Hygiene Dashboard</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cyber Hygiene Control Center 🛡️</title>
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #eaf3f8;
-      margin: 0;
-      padding: 20px;
-    }
+    :root {
+      --primary: #00ffcc;
+      --bg: #0f0f0f;
+      --text: #e0f7fa;
+      --card: #1c1c1c;
+      --glow: 0 0 8px var(--primary);
+    }body {
+  margin: 0;
+  padding: 20px;
+  font-family: 'Share Tech Mono', monospace;
+  background-color: var(--bg);
+  color: var(--text);
+}
 
-    .dashboard {
-      max-width: 400px;
-      margin: auto;
-      background: white;
-      border-radius: 12px;
-      padding: 20px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    }
+.container {
+  max-width: 400px;
+  margin: auto;
+  background: var(--card);
+  padding: 25px;
+  border-radius: 14px;
+  box-shadow: var(--glow);
+}
 
-    h2, h3 {
-      margin-top: 0;
-      color: #1976d2;
-    }
+h1, h2, h3 {
+  text-align: center;
+  color: var(--primary);
+  text-shadow: var(--glow);
+}
 
-    .tip {
-      background: #e3f2fd;
-      padding: 10px;
-      border-radius: 6px;
-      margin-bottom: 20px;
-      font-style: italic;
-    }
+.tip, #weeklyReminder, #scoreBoard {
+  background: #112;
+  padding: 12px;
+  border-radius: 8px;
+  margin: 15px 0;
+  text-align: center;
+  font-weight: bold;
+  border: 1px solid var(--primary);
+  box-shadow: var(--glow);
+}
 
-    label {
-      display: block;
-      margin-bottom: 10px;
-      font-size: 16px;
-    }
+ul {
+  list-style: none;
+  padding: 0;
+}
 
-    input[type="checkbox"] {
-      margin-right: 10px;
-    }
+li {
+  padding: 10px;
+  border-bottom: 1px solid #333;
+}
 
-    .progress-container {
-      margin-top: 15px;
-    }
+input[type="checkbox"] {
+  accent-color: var(--primary);
+}
 
-    progress {
-      width: 100%;
-      height: 20px;
-      margin-bottom: 10px;
-    }
+.progress-bar {
+  background: #222;
+  height: 20px;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: inset 0 0 4px #000, var(--glow);
+}
 
-    .badge {
-      text-align: center;
-      font-size: 18px;
-      font-weight: bold;
-    }
+.progress {
+  height: 100%;
+  background: linear-gradient(to right, #0ff, #0f0);
+  transition: width 0.3s ease-in-out;
+}
 
-    .buttons {
-      margin-top: 20px;
-      display: flex;
-      justify-content: space-between;
-      gap: 10px;
-    }
+.progress-text {
+  text-align: center;
+  font-weight: bold;
+  margin-top: 5px;
+}
 
-    button {
-      flex: 1;
-      padding: 10px;
-      border: none;
-      border-radius: 6px;
-      font-size: 14px;
-      cursor: pointer;
-    }
+button, select {
+  width: 100%;
+  padding: 12px;
+  margin-top: 12px;
+  background-color: transparent;
+  border: 1px solid var(--primary);
+  color: var(--text);
+  font-size: 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: var(--glow);
+}
 
-    .dark {
-      background-color: #121212;
-      color: white;
-    }
+select {
+  background-color: #0f0f0f;
+}
 
-    .dark .dashboard {
-      background-color: #1e1e1e;
-      color: white;
-    }
+#assistant {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: var(--primary);
+  color: #000;
+  width: 50px;
+  height: 50px;
+  font-size: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: var(--glow);
+}
+
+#chatBubble {
+  display: none;
+  position: absolute;
+  bottom: 60px;
+  right: 0;
+  background: var(--card);
+  color: var(--text);
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: var(--glow);
+  max-width: 220px;
+  font-size: 14px;
+}
+
   </style>
 </head>
 <body>
-  <div class="dashboard">
-    <h2>Welcome, <span id="user"></span> 👋</h2>
-    <div class="tip">💡 Tip of the Day:<br>Don't reuse passwords across sites.</div>
+  <div class="container">
+    <h1>🛡️ Cyber Hygiene Control Center</h1>
+    <h2>Welcome, <span id="username"></span></h2><div id="weeklyReminder">📅 It's Cyber Hygiene Check-in Day! Review your checklist and tips now 💡</div>
+<div class="tip" id="dailyTip">💡 Tip of the Day loading...</div>
 
-    <h3>🛡 Your Weekly Cyber Checklist</h3>
-    <label><input type="checkbox" onchange="updateProgress()"> Change your password</label>
-    <label><input type="checkbox" onchange="updateProgress()"> Backup files</label>
-    <label><input type="checkbox" onchange="updateProgress()"> Scan for malware</label>
-    <label><input type="checkbox" onchange="updateProgress()"> Check emails carefully</label>
-    <label><input type="checkbox" onchange="updateProgress()"> Use strong, unique passwords</label>
-    <label><input type="checkbox" onchange="updateProgress()"> Avoid clicking unknown links</label>
+<label for="themeSelect">🎨 Theme Color:</label>
+<select id="themeSelect">
+  <option value="#00ffcc">Aqua</option>
+  <option value="#ff3c3c">Red</option>
+  <option value="#00ff00">Green</option>
+  <option value="#ff00ff">Pink</option>
+  <option value="#ffffff">White</option>
+</select>
 
-    <div class="progress-container">
-      <progress id="progressBar" value="0" max="100"></progress>
-      <div class="badge">🏅 Shield Level: None</div>
-    </div>
+<ul id="checklist">
+  <li><input type="checkbox"> Use strong passwords</li>
+  <li><input type="checkbox"> Check emails carefully</li>
+  <li><input type="checkbox"> Scan for malware or viruses</li>
+  <li><input type="checkbox"> Backup important information</li>
+  <li><input type="checkbox"> Log out when done</li>
+</ul>
 
-    <div class="buttons">
-      <button onclick="toggleDarkMode()">🌙 Dark Mode</button>
-      <button onclick="resetChecklist()">♻️ Reset</button>
-      <button onclick="logout()">🚪 Logout</button>
-    </div>
-  </div>
+<div class="progress-bar">
+  <div class="progress" id="progressBar"></div>
+</div>
+<div class="progress-text" id="progressText">📉 0% Complete</div>
 
-  <script>
-    const username = localStorage.getItem("user");
-    document.getElementById("user").textContent = username || "User";
+<button onclick="resetChecklist()">🔄 Reset Checklist</button>
+<button onclick="window.location.href='quiz.html'">🎮 Take the Cyber Quiz</button>
+<button onclick="window.location.href='profile.html'">👤 View Profile</button>
+
+<div id="scoreBoard">📊 Last Quiz Score: <span id="quizScore">No score yet</span></div>
+
+  </div>  <div id="assistant" onclick="toggleBubble()">
+    💬
+    <div id="chatBubble">Hi there! Stay safe online 💡</div>
+  </div>  <script>
+    const checklist = document.querySelectorAll("#checklist input");
+    const progressBar = document.getElementById("progressBar");
+
+    checklist.forEach(item => {
+      item.addEventListener("change", updateProgress);
+    });
 
     function updateProgress() {
-      const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+      const total = checklist.length;
       let checked = 0;
-      checkboxes.forEach(cb => { if (cb.checked) checked++; });
-
-      const percent = Math.round((checked / checkboxes.length) * 100);
-      document.getElementById("progressBar").value = percent;
-
-      const badge = document.querySelector(".badge");
-      if (percent === 100) {
-        badge.textContent = "🏅 Shield Level: Gold 🥇";
-      } else if (percent >= 50) {
-        badge.textContent = "🏅 Shield Level: Silver 🥈";
-      } else if (percent >= 1) {
-        badge.textContent = "🏅 Shield Level: Bronze 🥉";
-      } else {
-        badge.textContent = "🏅 Shield Level: None";
-      }
+      checklist.forEach(i => { if (i.checked) checked++; });
+      const percent = Math.round((checked / total) * 100);
+      progressBar.style.width = percent + "%";
+      let emoji = "📉";
+      if (percent >= 20) emoji = "🚀";
+      if (percent >= 50) emoji = "🔥";
+      if (percent >= 80) emoji = "🏆";
+      if (percent === 100) emoji = "🎉";
+      document.getElementById("progressText").textContent = `${emoji} ${percent}% Complete`;
     }
 
     function resetChecklist() {
-      document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+      checklist.forEach(box => box.checked = false);
       updateProgress();
     }
 
-    function toggleDarkMode() {
-      document.body.classList.toggle("dark");
+    function showTip() {
+      const tips = [
+        "💡 Use a different password for each account.",
+        "💡 Avoid clicking on suspicious links.",
+        "💡 Enable two-factor authentication.",
+        "💡 Keep your software updated.",
+        "💡 Backup your data regularly.",
+        "💡 Scan for malware weekly."
+      ];
+      const today = new Date().getDate() % tips.length;
+      document.getElementById("dailyTip").textContent = tips[today];
     }
 
-    function logout() {
-      localStorage.removeItem("user");
-      window.location.href = "index.html";
+    function toggleBubble() {
+      const tips = [
+        "🛡️ Don’t share passwords with anyone!",
+        "💡 Update your antivirus weekly!",
+        "🔒 Use 2FA whenever you can!",
+        "🚫 Avoid using public Wi-Fi without a VPN.",
+        "📤 Always backup your files!"
+      ];
+      const chat = document.getElementById("chatBubble");
+      chat.textContent = tips[Math.floor(Math.random() * tips.length)];
+      chat.style.display = (chat.style.display === "none") ? "block" : "none";
     }
 
-    // Restore saved checklist state (optional upgrade coming soon)
-    updateProgress();
-  </script>
-</body>
+    function checkWeeklyReminder() {
+      const lastShown = localStorage.getItem("lastReminder");
+      const today = new Date().getTime();
+      const weekInMs = 7 * 24 * 60 * 60 * 1000;
+
+      if (!lastShown || today - parseInt(lastShown) > weekInMs) {
+        document.getElementById("weeklyReminder").style.display = "block";
+        localStorage.setItem("lastReminder", today);
+      }
+    }
+
+    document.getElementById("themeSelect").addEventListener("change", function() {
+      document.documentElement.style.setProperty('--primary', this.value);
+      localStorage.setItem("themeColor", this.value);
+    });
+
+    window.onload = function() {
+      const user = localStorage.getItem("user") || "User";
+      document.getElementById("username").textContent = user;
+
+      const savedColor = localStorage.getItem("themeColor");
+      if (savedColor) {
+        document.documentElement.style.setProperty('--primary', savedColor);
+        document.getElementById("themeSelect").value = savedColor;
+      }
+
+      const savedScore = localStorage.getItem("quizScore");
+      if (savedScore) {
+        document.getElementById("quizScore").textContent = savedScore;
+      }
+
+      showTip();
+      updateProgress();
+      checkWeeklyReminder();
+    }
+  </script></body>
 </html>

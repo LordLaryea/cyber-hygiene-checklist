@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Profile</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    :root {
+      --primary: #1976d2;
+      --bg: #f2f2f2;
+      --text: #000;
+      --card: #fff;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      margin: 0;
+      padding: 20px;
+      transition: 0.3s;
+    }
+
+    body.dark {
+      --bg: #121212;
+      --text: #fff;
+      --card: #1e1e1e;
+    }
+
+    .container {
+      max-width: 400px;
+      margin: auto;
+      background: var(--card);
+      padding: 25px;
+      border-radius: 14px;
+      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+
+    h2 {
+      color: var(--primary);
+      margin-bottom: 20px;
+    }
+
+    .preview {
+      font-size: 64px;
+      margin: 10px auto;
+      transition: transform 0.3s ease;
+    }
+
+    select, input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: var(--primary);
+      color: white;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 15px;
+    }
+
+    button:hover {
+      background-color: #1259aa;
+    }
+
+    label {
+      display: block;
+      text-align: left;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+
+    .back-link {
+      margin-top: 15px;
+      display: block;
+      font-size: 14px;
+      text-align: center;
+      color: var(--primary);
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>👤 Your Profile</h2>
+    <div class="preview" id="avatarPreview">😊</div>
+
+    <label for="avatar">Choose an Avatar Emoji:</label>
+    <select id="avatar">
+      <option value="😊">😊</option>
+      <option value="🛡️">🛡️</option>
+      <option value="👨‍💻">👨‍💻</option>
+      <option value="👩‍💻">👩‍💻</option>
+      <option value="🧠">🧠</option>
+      <option value="🚀">🚀</option>
+      <option value="🎯">🎯</option>
+    </select>
+
+    <label for="tagline">Your Tagline:</label>
+    <input type="text" id="tagline" placeholder="e.g. Cyber Ninja 🥷🏽" />
+
+    <button onclick="saveProfile()">💾 Save Profile</button>
+    <a href="dashboard.html" class="back-link">⬅️ Back to Dashboard</a>
+  </div>
+
+  <script>
+    const avatarSelect = document.getElementById("avatar");
+    const preview = document.getElementById("avatarPreview");
+
+    avatarSelect.addEventListener("change", () => {
+      preview.textContent = avatarSelect.value;
+    });
+
+    function saveProfile() {
+      const avatar = avatarSelect.value;
+      const tagline = document.getElementById("tagline").value;
+      localStorage.setItem("profileAvatar", avatar);
+      localStorage.setItem("profileTagline", tagline);
+      alert("✅ Profile saved!");
+      window.location.href = "dashboard.html";
+    }
+
+    window.onload = function () {
+      // Load previous
+      const savedAvatar = localStorage.getItem("profileAvatar") || "😊";
+      const savedTagline = localStorage.getItem("profileTagline") || "";
+      avatarSelect.value = savedAvatar;
+      preview.textContent = savedAvatar;
+      document.getElementById("tagline").value = savedTagline;
+
+      // Apply dark mode if set
+      const isDark = localStorage.getItem("darkMode") === "true";
+      if (isDark) {
+        document.body.classList.add("dark");
+      }
+    };
+  </script>
+</body>
+</html>
