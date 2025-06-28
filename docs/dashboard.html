@@ -1,59 +1,51 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>CyberHygiene Dashboard</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter&family=Roboto&family=Ubuntu&family=Orbitron&family=Poppins&family=Montserrat&family=Lato&family=Nunito&family=Raleway&family=Merriweather&family=Quicksand&family=Fira+Sans&family=PT+Sans&family=DM+Sans&family=Anton&family=Dancing+Script&family=Open+Sans&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter&family=Roboto&family=Ubuntu&family=Orbitron&family=Courier+Prime&family=Montserrat&family=Poppins&family=Quicksand&family=Space+Mono&family=Raleway&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-light: #f4f4f4;
-      --text-light: #111;
+      --bg-light: #f0f9ff;
       --accent: #00ffc3;
       --card-light: #ffffff;
+      --text: #111;
     }
-    html, body {
+    * { box-sizing: border-box; }
+    body {
       margin: 0;
-      padding: 0;
-      height: 100%;
-      overflow: hidden;
       font-family: 'Inter', sans-serif;
-      background: var(--bg-light);
-      color: var(--text-light);
+      background: #f0f9ff;
+      color: var(--text);
+      min-height: 100vh;
+      background-image: radial-gradient(circle, #e0f7fa 1px, transparent 1px), radial-gradient(circle, #b2ebf2 1px, transparent 1px);
+      background-position: 0 0, 25px 25px;
+      background-size: 50px 50px;
+      animation: gridMove 40s linear infinite;
+    }
+    @keyframes gridMove {
+      0% { background-position: 0 0, 25px 25px; }
+      100% { background-position: 50px 50px, 75px 75px; }
     }
     .container {
-      max-width: 600px;
-      height: 100%;
+      max-width: 700px;
       margin: auto;
       padding: 20px;
-      box-sizing: border-box;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-      overflow-y: auto;
     }
     header {
       text-align: center;
-      margin-bottom: 20px;
     }
     h1 {
       font-size: 2em;
       color: var(--accent);
     }
-    .settings-btn {
-      text-align: right;
-      margin-top: 10px;
-    }
-    .settings-panel {
-      display: none;
-      margin-top: 10px;
-      background: var(--card-light);
-      border-radius: 12px;
-      padding: 15px;
-    }
-    .settings-panel input, .settings-panel select {
-      width: 100%;
-      margin-bottom: 10px;
-      padding: 8px;
+    .profile-header {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      margin: 10px 0;
     }
     #avatarPreview {
       width: 50px;
@@ -61,31 +53,35 @@
       border-radius: 50%;
       object-fit: cover;
     }
-    .profile-header {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
+    .settings-panel {
+      display: none;
+      background: var(--card-light);
+      padding: 15px;
+      border-radius: 12px;
+      margin: 10px 0;
+    }
+    .settings-panel input, .settings-panel select {
+      width: 100%;
+      padding: 8px;
       margin-bottom: 10px;
     }
     .tip-box, .checklist, .score-box {
       background: var(--card-light);
-      border-radius: 12px;
       padding: 15px;
+      border-radius: 12px;
       margin-top: 20px;
     }
-    .checklist ul {
-      padding-left: 0;
-      list-style: none;
-    }
+    .checklist ul { list-style: none; padding: 0; }
+    .checklist li { margin-bottom: 10px; }
+    .checklist small { color: #666; display: block; margin-left: 20px; }
     .progress-bar {
+      height: 20px;
       background: #ccc;
       border-radius: 10px;
       overflow: hidden;
-      margin-top: 10px;
     }
     .progress-fill {
-      height: 20px;
+      height: 100%;
       width: 0;
       background: red;
       transition: width 0.3s;
@@ -95,21 +91,26 @@
       flex-wrap: wrap;
       gap: 10px;
       margin-top: 20px;
-      justify-content: space-between;
     }
     button {
-      padding: 10px;
       background: var(--accent);
-      border: none;
       color: black;
       font-weight: bold;
+      border: none;
+      padding: 10px;
       border-radius: 8px;
       cursor: pointer;
     }
-    #countdownBox {
+    .celebrate {
+      text-align: center;
+      font-size: 1.4em;
       margin-top: 15px;
-      font-weight: bold;
       color: green;
+    }
+    #countdownDisplay {
+      font-weight: bold;
+      text-align: center;
+      margin-top: 10px;
     }
   </style>
 </head>
@@ -121,72 +122,101 @@
         <img id="avatarPreview" src="https://i.imgur.com/DPzUj7F.png" alt="Avatar">
         <span id="userName">User</span>
       </div>
-    </header><div class="buttons">
-  <button onclick="location.href='quiz.html'">🧠 Take Quiz</button>
-  <button onclick="refreshChecklist()">🔄 Refresh Tasks</button>
-  <button onclick="toggleSettings()">⚙️ Settings</button>
-</div>
+    </header>
 
-<div class="settings-panel" id="settingsPanel">
-  <input type="text" id="newUsername" placeholder="Change Username">
-  <input type="password" id="newPassword" placeholder="Change Password">
-  <input type="file" id="avatarInput" accept="image/*">
+    <div class="buttons">
+      <button onclick="toggleSettings()">⚙️ Settings</button>
+      <button onclick="refreshChecklist()">🔄 Refresh Tasks</button>
+      <button onclick="location.href='quiz.html'">🧠 Take Quiz</button>
+    </div>
 
-  <label>Font Style:</label>
-  <select id="fontStyle">
-    <option value="Inter">Inter</option>
-    <option value="Roboto">Roboto</option>
-    <option value="Ubuntu">Ubuntu</option>
-    <option value="Orbitron">Orbitron</option>
-    <option value="Poppins">Poppins</option>
-    <option value="Montserrat">Montserrat</option>
-    <option value="Lato">Lato</option>
-    <option value="Nunito">Nunito</option>
-    <option value="Raleway">Raleway</option>
-    <option value="Merriweather">Merriweather</option>
-    <option value="Quicksand">Quicksand</option>
-    <option value="Fira Sans">Fira Sans</option>
-    <option value="PT Sans">PT Sans</option>
-    <option value="DM Sans">DM Sans</option>
-    <option value="Anton">Anton</option>
-    <option value="Dancing Script">Dancing Script</option>
-    <option value="Open Sans">Open Sans</option>
-  </select>
+    <div class="settings-panel" id="settingsPanel">
+      <input type="text" id="newUsername" placeholder="Change Username">
+      <input type="password" id="newPassword" placeholder="Change Password">
+      <input type="file" id="avatarInput" accept="image/*">
+      <label>Font Style:</label>
+      <select id="fontStyle">
+        <option value="'Inter', sans-serif">Inter</option>
+        <option value="'Roboto', sans-serif">Roboto</option>
+        <option value="'Ubuntu', sans-serif">Ubuntu</option>
+        <option value="'Orbitron', sans-serif">Orbitron</option>
+        <option value="'Courier Prime', monospace">Courier Prime</option>
+        <option value="'Montserrat', sans-serif">Montserrat</option>
+        <option value="'Poppins', sans-serif">Poppins</option>
+        <option value="'Quicksand', sans-serif">Quicksand</option>
+        <option value="'Raleway', sans-serif">Raleway</option>
+        <option value="'Space Mono', monospace">Space Mono</option>
+      </select>
+      <label>Font Color:</label>
+      <input type="color" id="fontColor" value="#111111">
+      <label>Font Size:</label>
+      <input type="range" id="fontSize" min="12" max="24" value="16">
+      <button onclick="saveSettings()">💾 Save Settings</button>
+    </div>
 
-  <label>Font Color:</label>
-  <input type="color" id="fontColor" value="#111111">
+    <div class="tip-box">
+      <strong>💡 Tip of the Day:</strong>
+      <p id="tipText">Loading...</p>
+    </div>
 
-  <label>Font Size:</label>
-  <input type="range" id="fontSize" min="12" max="24" value="16">
+    <div class="checklist">
+      <h3>Today's Checklist</h3>
+      <ul id="taskList"></ul>
+      <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+      <div id="celebration" class="celebrate"></div>
+      <button id="doneButton" onclick="startCountdown()">✅ Done</button>
+      <div id="countdownDisplay"></div>
+    </div>
 
-  <button onclick="saveSettings()">💾 Save Settings</button>
-</div>
+    <div class="score-box">
+      🎯 Quiz Score: <span id="score">0</span>/5
+    </div>
+  </div>
 
-<div class="tip-box">
-  <strong>💡 Tip of the Day:</strong>
-  <p id="tipText">Loading...</p>
-</div>
-
-<div class="checklist">
-  <h3>Today's Checklist</h3>
-  <ul id="taskList"></ul>
-  <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
-  <button onclick="markChecklistDone()">✅ Done</button>
-  <div id="countdownBox"></div>
-</div>
-
-<div class="score-box">
-  🎯 Quiz Score: <span id="score">0</span>/5
-</div>
-
-  </div>  <script>
+  <script>
     const tips = [
-      "Avoid suspicious links.",
-      "Use strong passwords.",
-      "Enable two-factor authentication.",
-      "Update apps regularly.",
-      "Back up your data!"
+      "Avoid suspicious links.", "Use strong passwords.",
+      "Enable two-factor authentication.", "Update apps regularly.",
+      "Back up your data!", "Check for device updates."
     ];
+
+    const checklistDescriptions = {
+      "Update antivirus": "Keep your antivirus software up to date to protect against the latest threats.",
+      "Review app permissions": "Ensure apps only have access to necessary data.",
+      "Secure Wi-Fi": "Use strong Wi-Fi passwords and encryption.",
+      "Backup files": "Regularly back up your important data to avoid loss.",
+      "Log out unused devices": "Sign out from unused or unknown devices for security.",
+      "Update OS": "Install OS updates for bug fixes and security patches.",
+      "Check phishing emails": "Be cautious of fake emails asking for personal info.",
+      "Enable 2FA": "Use two-factor authentication to enhance account security.",
+      "Clear browser cache": "Clear cache to protect your privacy and improve performance.",
+      "Review privacy settings": "Check and adjust your app and account privacy settings.",
+      "Avoid public Wi-Fi": "Don't use public Wi-Fi without a VPN.",
+      "Change passwords": "Use strong, unique passwords regularly.",
+      "Secure cloud": "Use encryption for cloud backups and review access logs.",
+      "Delete spam": "Regularly clear spam to avoid malware.",
+      "Run virus scan": "Scan your device regularly for threats.",
+      "Check login history": "Monitor login activity for unusual access.",
+      "Remove unused apps": "Uninstall apps you no longer use.",
+      "Enable screen lock": "Set auto-lock and strong lockscreen passwords.",
+      "Update apps": "Outdated apps can have security flaws.",
+      "Read a security blog": "Stay informed about latest threats and tips.",
+      "Secure social profiles": "Limit public visibility and use strong passwords.",
+      "Enable biometric login": "Use fingerprint or face ID where possible.",
+      "Use VPN": "Protect your connection, especially on public networks.",
+      "Update password manager": "Ensure your stored credentials are secure.",
+      "Check for breaches": "Use tools like HaveIBeenPwned to check your data.",
+      "Review connected devices": "Check for unauthorized devices.",
+      "Use incognito mode": "Browse privately without saving history.",
+      "Delete old accounts": "Old accounts can be security risks.",
+      "Test backup restore": "Ensure backups actually restore correctly.",
+      "Log out sessions": "Log out from all active sessions periodically.",
+      "Change main password": "Rotate your primary login password.",
+      "Secure backup": "Store backups in encrypted, secure locations.",
+      "Avoid pop-ups": "Don't click pop-ups—they may be malicious.",
+      "Check recovery email": "Ensure your recovery email is valid and protected.",
+      "Clear old data": "Remove unused files and sensitive info."
+    };
 
     const dailyTasks = {
       0: ["Update antivirus", "Review app permissions", "Secure Wi-Fi", "Backup files", "Log out unused devices"],
@@ -204,25 +234,26 @@
     }
 
     function saveSettings() {
-      const newUser = document.getElementById("newUsername").value;
-      const newPass = document.getElementById("newPassword").value;
       const font = document.getElementById("fontStyle").value;
       const color = document.getElementById("fontColor").value;
-      const size = document.getElementById("fontSize").value;
+      const size = document.getElementById("fontSize").value + "px";
+      document.body.style.fontFamily = font;
+      document.body.style.color = color;
+      document.body.style.fontSize = size;
+
+      const newUser = document.getElementById("newUsername").value;
+      const newPass = document.getElementById("newPassword").value;
 
       if (newUser) {
         localStorage.setItem("user", newUser);
         document.getElementById("userName").textContent = newUser;
       }
+
       if (newPass) {
         localStorage.setItem("password", newPass);
         alert("Password changed. Please log in again.");
         window.location.href = "index.html";
       }
-
-      document.body.style.fontFamily = `'${font}', sans-serif`;
-      document.body.style.color = color;
-      document.body.style.fontSize = size + "px";
     }
 
     function refreshChecklist() {
@@ -234,11 +265,21 @@
       const list = dailyTasks[day];
       const taskList = document.getElementById("taskList");
       taskList.innerHTML = "";
-      list.forEach((task, index) => {
+      list.forEach(task => {
         const li = document.createElement("li");
-        li.innerHTML = `<label><input type='checkbox' onchange='updateProgress()'> ${task}</label>`;
+        li.innerHTML = `<label><input type="checkbox" onchange="showExplanation(this, '${task}')"> ${task}</label><small id="${task.replace(/\s/g, '') + 'Desc'}"></small>`;
         taskList.appendChild(li);
       });
+      updateProgress();
+    }
+
+    function showExplanation(checkbox, taskName) {
+      const desc = document.getElementById(taskName.replace(/\s/g, '') + 'Desc');
+      if (checkbox.checked) {
+        desc.textContent = checklistDescriptions[taskName] || "";
+      } else {
+        desc.textContent = "";
+      }
       updateProgress();
     }
 
@@ -246,33 +287,42 @@
       const checkboxes = document.querySelectorAll("input[type='checkbox']");
       const checked = [...checkboxes].filter(c => c.checked).length;
       const percent = (checked / checkboxes.length) * 100;
-      const fill = document.getElementById("progressFill");
-      fill.style.width = percent + "%";
-      fill.style.background = percent < 34 ? "red" : percent < 67 ? "orange" : "limegreen";
+      document.getElementById("progressFill").style.width = percent + "%";
+      document.getElementById("progressFill").style.background = percent < 34 ? "red" : percent < 67 ? "orange" : "limegreen";
+
+      const allDone = percent === 100;
+      document.getElementById("celebration").textContent = allDone ? "🎉 Great job! All tasks done!" : "";
     }
 
-    function markChecklistDone() {
-      const now = Date.now();
-      localStorage.setItem("lastChecklistTime", now);
+    function startCountdown() {
+      const end = Date.now() + 86400000;
+      localStorage.setItem("countdownEnd", end);
       updateCountdown();
     }
 
     function updateCountdown() {
-      const last = localStorage.getItem("lastChecklistTime");
-      if (!last) return;
-      const diff = 86400000 - (Date.now() - Number(last));
-      const box = document.getElementById("countdownBox");
-
-      if (diff > 0) {
-        const hours = Math.floor(diff / 3600000);
-        const minutes = Math.floor((diff % 3600000) / 60000);
-        const seconds = Math.floor((diff % 60000) / 1000);
-        box.textContent = `⏳ Next checklist in ${hours}h ${minutes}m ${seconds}s`;
-        setTimeout(updateCountdown, 1000);
+      const end = localStorage.getItem("countdownEnd");
+      const now = Date.now();
+      const diff = end - now;
+      const countdownDisplay = document.getElementById("countdownDisplay");
+      if (diff <= 0) {
+        countdownDisplay.textContent = "✅ New checklist available!";
+        localStorage.removeItem("countdownEnd");
+        renderChecklist();
       } else {
-        box.textContent = "✅ You can now check today's checklist!";
-        localStorage.removeItem("lastChecklistTime");
+        const hrs = Math.floor(diff / 3600000);
+        const mins = Math.floor((diff % 3600000) / 60000);
+        const secs = Math.floor((diff % 60000) / 1000);
+        countdownDisplay.textContent = `⏳ Next checklist in ${hrs}h ${mins}m ${secs}s`;
+        setTimeout(updateCountdown, 1000);
       }
+    }
+
+    function loadUser() {
+      document.getElementById("userName").textContent = localStorage.getItem("user") || "User";
+      document.getElementById("score").textContent = localStorage.getItem("quizScore") || 0;
+      const avatar = localStorage.getItem("userAvatar");
+      if (avatar) document.getElementById("avatarPreview").src = avatar;
     }
 
     document.getElementById("avatarInput").addEventListener("change", function (e) {
@@ -287,24 +337,19 @@
       reader.readAsDataURL(file);
     });
 
-    function loadUser() {
-      document.getElementById("userName").textContent = localStorage.getItem("user") || "User";
-      document.getElementById("score").textContent = localStorage.getItem("quizScore") || 0;
-      const avatar = localStorage.getItem("userAvatar");
-      if (avatar) document.getElementById("avatarPreview").src = avatar;
-
-      updateCountdown();
-    }
+    window.onload = function () {
+      showTip();
+      renderChecklist();
+      loadUser();
+      if (localStorage.getItem("countdownEnd")) {
+        updateCountdown();
+      }
+    };
 
     function showTip() {
       const tip = tips[Math.floor(Math.random() * tips.length)];
       document.getElementById("tipText").textContent = tip;
     }
-
-    window.onload = function () {
-      showTip();
-      renderChecklist();
-      loadUser();
-    };
-  </script></body>
+  </script>
+</body>
 </html>
