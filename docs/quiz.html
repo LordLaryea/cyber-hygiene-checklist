@@ -1,130 +1,161 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Cyber Quiz</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cyber Quiz</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter&family=Orbitron&display=swap" rel="stylesheet">
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f5f5f5;
-      margin: 0;
-      padding: 20px;
-      color: #333;
-    }
+    :root {
+      --bg: #f0f9ff;
+      --card: #ffffff;
+      --accent: #00ffc3;
+      --text: #111;
+    }body {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
+}
 
-    .container {
-      max-width: 500px;
-      margin: auto;
-      background: #fff;
-      padding: 25px;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    }
+.cyber-bg {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: repeating-radial-gradient(circle, rgba(0, 255, 200, 0.1) 0, transparent 40px);
+  animation: rotate 100s linear infinite;
+  z-index: 0;
+}
 
-    h2 {
-      text-align: center;
-      color: #1976d2;
-    }
+@keyframes rotate {
+  0% { transform: rotate(0); }
+  100% { transform: rotate(360deg); }
+}
 
-    .question {
-      margin: 20px 0;
-    }
+.quiz-container {
+  position: relative;
+  z-index: 1;
+  background: var(--card);
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 0 20px rgba(0, 255, 195, 0.4);
+  max-width: 600px;
+  width: 90%;
+}
 
-    .question p {
-      font-weight: bold;
-    }
+h2 {
+  font-family: 'Orbitron', sans-serif;
+  color: var(--accent);
+}
 
-    label {
-      display: block;
-      margin: 6px 0;
-    }
+.question {
+  margin-bottom: 20px;
+}
 
-    button {
-      width: 100%;
-      padding: 12px;
-      background-color: #1976d2;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      font-size: 16px;
-      cursor: pointer;
-      margin-top: 20px;
-    }
+.question p {
+  font-weight: bold;
+}
 
-    button:hover {
-      background-color: #1565c0;
-    }
+label {
+  display: block;
+  margin-bottom: 8px;
+  cursor: pointer;
+}
+
+input[type="radio"] {
+  margin-right: 10px;
+}
+
+button {
+  padding: 10px 20px;
+  background-color: var(--accent);
+  color: black;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 15px;
+}
+
+.tooltip {
+  font-size: 0.85em;
+  color: gray;
+}
+
+.score {
+  margin-top: 20px;
+  font-weight: bold;
+}
+
   </style>
 </head>
 <body>
-  <div class="container">
-    <h2>🛡️ Cyber Hygiene Quiz</h2>
-
+  <div class="cyber-bg"></div>
+  <div class="quiz-container">
+    <h2>Cyber Hygiene Quiz</h2>
     <form id="quizForm">
       <div class="question">
-        <p>1. What’s the safest way to create passwords?</p>
-        <label><input type="radio" name="q0" value="a" /> Use your name</label>
-        <label><input type="radio" name="q0" value="b" /> Use a mix of characters and numbers</label>
-        <label><input type="radio" name="q0" value="c" /> Use only numbers</label>
+        <p>1. What is phishing?</p>
+        <label><input type="radio" name="q1" value="a">A type of social engineering attack</label>
+        <label><input type="radio" name="q1" value="b">A way to catch fish</label>
+        <label><input type="radio" name="q1" value="c">A method for encrypting files</label>
+        <label><input type="radio" name="q1" value="d">An antivirus software</label>
       </div>
-
       <div class="question">
-        <p>2. What should you do before clicking an email link?</p>
-        <label><input type="radio" name="q1" value="a" /> Click quickly</label>
-        <label><input type="radio" name="q1" value="b" /> Hover to preview and verify sender</label>
-        <label><input type="radio" name="q1" value="c" /> Forward it to friends</label>
+        <p>2. Which of the following is a strong password?</p>
+        <label><input type="radio" name="q2" value="a">123456</label>
+        <label><input type="radio" name="q2" value="b">password</label>
+        <label><input type="radio" name="q2" value="c">P@ssw0rd!2023</label>
+        <label><input type="radio" name="q2" value="d">qwerty</label>
       </div>
-
       <div class="question">
-        <p>3. Why should you update software regularly?</p>
-        <label><input type="radio" name="q2" value="a" /> To waste space</label>
-        <label><input type="radio" name="q2" value="b" /> For better colors</label>
-        <label><input type="radio" name="q2" value="c" /> To fix bugs and protect from threats</label>
+        <p>3. What should you do before clicking a link in an email?</p>
+        <label><input type="radio" name="q3" value="a">Click quickly</label>
+        <label><input type="radio" name="q3" value="b">Ignore it</label>
+        <label><input type="radio" name="q3" value="c">Check the URL and sender</label>
+        <label><input type="radio" name="q3" value="d">Forward it to a friend</label>
       </div>
-
       <div class="question">
-        <p>4. What’s a safe backup method?</p>
-        <label><input type="radio" name="q3" value="a" /> Save everything on desktop</label>
-        <label><input type="radio" name="q3" value="b" /> Use cloud or external drive</label>
-        <label><input type="radio" name="q3" value="c" /> Print it all</label>
+        <p>4. What is two-factor authentication?</p>
+        <label><input type="radio" name="q4" value="a">Logging in with only a username</label>
+        <label><input type="radio" name="q4" value="b">Using two usernames</label>
+        <label><input type="radio" name="q4" value="c">A second method to confirm your identity</label>
+        <label><input type="radio" name="q4" value="d">Two passwords</label>
       </div>
-
       <div class="question">
-        <p>5. What does antivirus software do?</p>
-        <label><input type="radio" name="q4" value="a" /> Decorates your screen</label>
-        <label><input type="radio" name="q4" value="b" /> Protects against malware</label>
-        <label><input type="radio" name="q4" value="c" /> Slows down your computer</label>
+        <p>5. Why should you update your apps?</p>
+        <label><input type="radio" name="q5" value="a">To get new emojis</label>
+        <label><input type="radio" name="q5" value="b">To improve security and performance</label>
+        <label><input type="radio" name="q5" value="c">To waste data</label>
+        <label><input type="radio" name="q5" value="d">No reason</label>
       </div>
-
-      <button type="button" onclick="submitQuiz()">Submit Quiz</button>
+      <button type="button" onclick="submitQuiz()">Submit</button>
     </form>
-  </div>
-
-  <script>
-    const quizData = [
-      { answer: "b" },
-      { answer: "b" },
-      { answer: "c" },
-      { answer: "b" },
-      { answer: "b" }
-    ];
+    <div class="score" id="scoreDisplay"></div>
+  </div>  <script>
+    const correctAnswers = {
+      q1: "a",
+      q2: "c",
+      q3: "c",
+      q4: "c",
+      q5: "b"
+    };
 
     function submitQuiz() {
       let score = 0;
-      quizData.forEach((q, i) => {
-        const selected = document.querySelector(`input[name="q${i}"]:checked`);
-        if (selected && selected.value === q.answer) {
+      for (let q in correctAnswers) {
+        const selected = document.querySelector(`input[name="${q}"]:checked`);
+        if (selected && selected.value === correctAnswers[q]) {
           score++;
         }
-      });
-
-      // Save the score to localStorage
-      localStorage.setItem("quizScore", `${score}/${quizData.length}`);
-
-      alert(`🎉 You scored ${score} out of ${quizData.length}!`);
-      window.location.href = "dashboard.html";
+      }
+      document.getElementById("scoreDisplay").textContent = `You scored ${score}/5!`;
+      localStorage.setItem("quizScore", score);
     }
-  </script>
-</body>
+  </script></body>
 </html>

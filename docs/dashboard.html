@@ -1,258 +1,313 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Cyber Hygiene Control Center 🛡️</title>
-  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <title>CyberHygiene Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter&family=Roboto&family=Ubuntu&family=Orbitron&family=Open+Sans&family=Poppins&family=Lato&family=Montserrat&family=Raleway&family=Merriweather&family=Playfair+Display&family=Bebas+Neue&family=Nunito&family=Quicksand&family=Work+Sans&display=swap" rel="stylesheet">
   <style>
     :root {
-      --primary: #00ffcc;
-      --bg: #0f0f0f;
-      --text: #e0f7fa;
-      --card: #1c1c1c;
-      --glow: 0 0 8px var(--primary);
-    }body {
-  margin: 0;
-  padding: 20px;
-  font-family: 'Share Tech Mono', monospace;
-  background-color: var(--bg);
-  color: var(--text);
-}
+      --bg-light: #f4f4f4;
+      --text-light: #111;
+      --accent: #00ffc3;
+      --card-light: #ffffff;
+    }
 
-.container {
-  max-width: 400px;
-  margin: auto;
-  background: var(--card);
-  padding: 25px;
-  border-radius: 14px;
-  box-shadow: var(--glow);
-}
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      overflow: hidden;
+      font-family: 'Inter', sans-serif;
+      background: var(--bg-light);
+      color: var(--text-light);
+    }
 
-h1, h2, h3 {
-  text-align: center;
-  color: var(--primary);
-  text-shadow: var(--glow);
-}
+    .container {
+      max-width: 600px;
+      height: 100%;
+      margin: auto;
+      padding: 20px;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      overflow-y: auto;
+    }
 
-.tip, #weeklyReminder, #scoreBoard {
-  background: #112;
-  padding: 12px;
-  border-radius: 8px;
-  margin: 15px 0;
-  text-align: center;
-  font-weight: bold;
-  border: 1px solid var(--primary);
-  box-shadow: var(--glow);
-}
+    header {
+      text-align: center;
+      margin-bottom: 10px;
+    }
 
-ul {
-  list-style: none;
-  padding: 0;
-}
+    h1 {
+      font-size: 2em;
+      color: var(--accent);
+    }
 
-li {
-  padding: 10px;
-  border-bottom: 1px solid #333;
-}
+    .profile-header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
 
-input[type="checkbox"] {
-  accent-color: var(--primary);
-}
+    #avatarPreview {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
 
-.progress-bar {
-  background: #222;
-  height: 20px;
-  border-radius: 20px;
-  overflow: hidden;
-  box-shadow: inset 0 0 4px #000, var(--glow);
-}
+    .buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: space-between;
+      margin-top: 10px;
+    }
 
-.progress {
-  height: 100%;
-  background: linear-gradient(to right, #0ff, #0f0);
-  transition: width 0.3s ease-in-out;
-}
+    .settings-panel {
+      display: none;
+      margin-top: 10px;
+      background: var(--card-light);
+      border-radius: 12px;
+      padding: 15px;
+    }
 
-.progress-text {
-  text-align: center;
-  font-weight: bold;
-  margin-top: 5px;
-}
+    .settings-panel input, .settings-panel select {
+      width: 100%;
+      margin-bottom: 10px;
+      padding: 8px;
+    }
 
-button, select {
-  width: 100%;
-  padding: 12px;
-  margin-top: 12px;
-  background-color: transparent;
-  border: 1px solid var(--primary);
-  color: var(--text);
-  font-size: 16px;
-  border-radius: 8px;
-  cursor: pointer;
-  box-shadow: var(--glow);
-}
+    .tip-box, .checklist, .score-box {
+      background: var(--card-light);
+      border-radius: 12px;
+      padding: 15px;
+      margin-top: 20px;
+    }
 
-select {
-  background-color: #0f0f0f;
-}
+    .checklist ul {
+      padding-left: 0;
+      list-style: none;
+    }
 
-#assistant {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  background: var(--primary);
-  color: #000;
-  width: 50px;
-  height: 50px;
-  font-size: 24px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  box-shadow: var(--glow);
-}
+    .progress-bar {
+      background: #ccc;
+      border-radius: 10px;
+      overflow: hidden;
+      margin-top: 10px;
+    }
 
-#chatBubble {
-  display: none;
-  position: absolute;
-  bottom: 60px;
-  right: 0;
-  background: var(--card);
-  color: var(--text);
-  padding: 10px;
-  border-radius: 10px;
-  box-shadow: var(--glow);
-  max-width: 220px;
-  font-size: 14px;
-}
+    .progress-fill {
+      height: 20px;
+      width: 0;
+      background: red;
+      transition: width 0.3s;
+    }
 
+    button {
+      padding: 10px;
+      background: var(--accent);
+      border: none;
+      color: black;
+      font-weight: bold;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .top-controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 10px;
+    }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>🛡️ Cyber Hygiene Control Center</h1>
-    <h2>Welcome, <span id="username"></span></h2><div id="weeklyReminder">📅 It's Cyber Hygiene Check-in Day! Review your checklist and tips now 💡</div>
-<div class="tip" id="dailyTip">💡 Tip of the Day loading...</div>
+    <header>
+      <h1>🛡️ CyberHygiene Dashboard</h1>
+      <div class="profile-header">
+        <img id="avatarPreview" src="https://i.imgur.com/DPzUj7F.png" alt="Avatar">
+        <span id="userName">User</span>
+      </div>
+    </header>
 
-<label for="themeSelect">🎨 Theme Color:</label>
-<select id="themeSelect">
-  <option value="#00ffcc">Aqua</option>
-  <option value="#ff3c3c">Red</option>
-  <option value="#00ff00">Green</option>
-  <option value="#ff00ff">Pink</option>
-  <option value="#ffffff">White</option>
-</select>
+    <div class="top-controls">
+      <button onclick="refreshChecklist()">🔄 Refresh Tasks</button>
+      <button onclick="toggleSettings()">⚙️ Settings</button>
+    </div>
 
-<ul id="checklist">
-  <li><input type="checkbox"> Use strong passwords</li>
-  <li><input type="checkbox"> Check emails carefully</li>
-  <li><input type="checkbox"> Scan for malware or viruses</li>
-  <li><input type="checkbox"> Backup important information</li>
-  <li><input type="checkbox"> Log out when done</li>
-</ul>
+    <div class="settings-panel" id="settingsPanel">
+      <input type="text" id="newUsername" placeholder="Change Username">
+      <input type="password" id="newPassword" placeholder="Change Password">
+      <input type="file" id="avatarInput" accept="image/*">
 
-<div class="progress-bar">
-  <div class="progress" id="progressBar"></div>
-</div>
-<div class="progress-text" id="progressText">📉 0% Complete</div>
+      <label>Font Style:</label>
+      <select id="fontStyle">
+        <option value="'Inter', sans-serif">Inter</option>
+        <option value="'Roboto', sans-serif">Roboto</option>
+        <option value="'Ubuntu', sans-serif">Ubuntu</option>
+        <option value="'Orbitron', sans-serif">Orbitron</option>
+        <option value="'Open Sans', sans-serif">Open Sans</option>
+        <option value="'Poppins', sans-serif">Poppins</option>
+        <option value="'Lato', sans-serif">Lato</option>
+        <option value="'Montserrat', sans-serif">Montserrat</option>
+        <option value="'Raleway', sans-serif">Raleway</option>
+        <option value="'Merriweather', serif">Merriweather</option>
+        <option value="'Playfair Display', serif">Playfair Display</option>
+        <option value="'Bebas Neue', cursive">Bebas Neue</option>
+        <option value="'Nunito', sans-serif">Nunito</option>
+        <option value="'Quicksand', sans-serif">Quicksand</option>
+        <option value="'Work Sans', sans-serif">Work Sans</option>
+      </select>
 
-<button onclick="resetChecklist()">🔄 Reset Checklist</button>
-<button onclick="window.location.href='quiz.html'">🎮 Take the Cyber Quiz</button>
-<button onclick="window.location.href='profile.html'">👤 View Profile</button>
+      <label>Font Color:</label>
+      <input type="color" id="fontColor" value="#111111">
 
-<div id="scoreBoard">📊 Last Quiz Score: <span id="quizScore">No score yet</span></div>
+      <label>Font Size:</label>
+      <input type="range" id="fontSize" min="12" max="28" value="16">
 
-  </div>  <div id="assistant" onclick="toggleBubble()">
-    💬
-    <div id="chatBubble">Hi there! Stay safe online 💡</div>
-  </div>  <script>
-    const checklist = document.querySelectorAll("#checklist input");
-    const progressBar = document.getElementById("progressBar");
+      <button onclick="saveSettings()">💾 Save Settings</button>
+    </div>
 
-    checklist.forEach(item => {
-      item.addEventListener("change", updateProgress);
-    });
+    <div class="tip-box">
+      <strong>💡 Tip of the Day:</strong>
+      <p id="tipText">Loading...</p>
+    </div>
 
-    function updateProgress() {
-      const total = checklist.length;
-      let checked = 0;
-      checklist.forEach(i => { if (i.checked) checked++; });
-      const percent = Math.round((checked / total) * 100);
-      progressBar.style.width = percent + "%";
-      let emoji = "📉";
-      if (percent >= 20) emoji = "🚀";
-      if (percent >= 50) emoji = "🔥";
-      if (percent >= 80) emoji = "🏆";
-      if (percent === 100) emoji = "🎉";
-      document.getElementById("progressText").textContent = `${emoji} ${percent}% Complete`;
+    <div class="checklist">
+      <h3>Today's Checklist</h3>
+      <ul id="taskList"></ul>
+      <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    </div>
+
+    <div class="score-box">
+      🎯 Quiz Score: <span id="score">0</span>/5
+    </div>
+
+    <div class="buttons">
+      <button onclick="location.href='quiz.html'">🧠 Take Quiz</button>
+    </div>
+  </div>
+
+  <script>
+    const tips = [
+      "Avoid suspicious links.",
+      "Use strong passwords.",
+      "Enable two-factor authentication.",
+      "Update apps regularly.",
+      "Back up your data!"
+    ];
+
+    const dailyTasks = {
+      0: ["Update antivirus", "Review app permissions", "Secure Wi-Fi", "Backup files", "Log out unused devices"],
+      1: ["Update OS", "Check phishing emails", "Enable 2FA", "Clear browser cache", "Review privacy settings"],
+      2: ["Avoid public Wi-Fi", "Change passwords", "Secure cloud", "Delete spam", "Run virus scan"],
+      3: ["Check login history", "Remove unused apps", "Enable screen lock", "Update apps", "Read a security blog"],
+      4: ["Secure social profiles", "Enable biometric login", "Use VPN", "Update password manager", "Check for breaches"],
+      5: ["Review connected devices", "Use incognito mode", "Delete old accounts", "Test backup restore", "Log out sessions"],
+      6: ["Change main password", "Secure backup", "Avoid pop-ups", "Check recovery email", "Clear old data"]
+    };
+
+    function toggleSettings() {
+      const panel = document.getElementById("settingsPanel");
+      panel.style.display = panel.style.display === "block" ? "none" : "block";
     }
 
-    function resetChecklist() {
-      checklist.forEach(box => box.checked = false);
+    function saveSettings() {
+      const newUser = document.getElementById("newUsername").value;
+      const newPass = document.getElementById("newPassword").value;
+      const font = document.getElementById("fontStyle").value;
+      const color = document.getElementById("fontColor").value;
+      const size = document.getElementById("fontSize").value;
+
+      if (newUser) {
+        localStorage.setItem("user", newUser);
+        document.getElementById("userName").textContent = newUser;
+      }
+
+      if (newPass) {
+        localStorage.setItem("password", newPass);
+        alert("Password changed. Please log in again.");
+        window.location.href = "index.html";
+      }
+
+      document.body.style.fontFamily = font;
+      document.body.style.color = color;
+      document.body.style.fontSize = size + "px";
+
+      localStorage.setItem("fontStyle", font);
+      localStorage.setItem("fontColor", color);
+      localStorage.setItem("fontSize", size);
+    }
+
+    function refreshChecklist() {
+      renderChecklist();
+    }
+
+    function renderChecklist() {
+      const day = new Date().getDay();
+      const list = dailyTasks[day];
+      const taskList = document.getElementById("taskList");
+      taskList.innerHTML = "";
+      list.forEach((task) => {
+        const li = document.createElement("li");
+        li.innerHTML = `<label><input type='checkbox' onchange='updateProgress()'> ${task}</label>`;
+        taskList.appendChild(li);
+      });
       updateProgress();
+    }
+
+    function updateProgress() {
+      const checkboxes = document.querySelectorAll("input[type='checkbox']");
+      const checked = [...checkboxes].filter(c => c.checked).length;
+      const percent = (checked / checkboxes.length) * 100;
+      const fill = document.getElementById("progressFill");
+      fill.style.width = percent + "%";
+      fill.style.background = percent < 34 ? "red" : percent < 67 ? "orange" : "limegreen";
     }
 
     function showTip() {
-      const tips = [
-        "💡 Use a different password for each account.",
-        "💡 Avoid clicking on suspicious links.",
-        "💡 Enable two-factor authentication.",
-        "💡 Keep your software updated.",
-        "💡 Backup your data regularly.",
-        "💡 Scan for malware weekly."
-      ];
-      const today = new Date().getDate() % tips.length;
-      document.getElementById("dailyTip").textContent = tips[today];
+      const tip = tips[Math.floor(Math.random() * tips.length)];
+      document.getElementById("tipText").textContent = tip;
     }
 
-    function toggleBubble() {
-      const tips = [
-        "🛡️ Don’t share passwords with anyone!",
-        "💡 Update your antivirus weekly!",
-        "🔒 Use 2FA whenever you can!",
-        "🚫 Avoid using public Wi-Fi without a VPN.",
-        "📤 Always backup your files!"
-      ];
-      const chat = document.getElementById("chatBubble");
-      chat.textContent = tips[Math.floor(Math.random() * tips.length)];
-      chat.style.display = (chat.style.display === "none") ? "block" : "none";
-    }
-
-    function checkWeeklyReminder() {
-      const lastShown = localStorage.getItem("lastReminder");
-      const today = new Date().getTime();
-      const weekInMs = 7 * 24 * 60 * 60 * 1000;
-
-      if (!lastShown || today - parseInt(lastShown) > weekInMs) {
-        document.getElementById("weeklyReminder").style.display = "block";
-        localStorage.setItem("lastReminder", today);
-      }
-    }
-
-    document.getElementById("themeSelect").addEventListener("change", function() {
-      document.documentElement.style.setProperty('--primary', this.value);
-      localStorage.setItem("themeColor", this.value);
+    document.getElementById("avatarInput").addEventListener("change", function (e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        const dataURL = e.target.result;
+        document.getElementById("avatarPreview").src = dataURL;
+        localStorage.setItem("userAvatar", dataURL);
+      };
+      reader.readAsDataURL(file);
     });
 
-    window.onload = function() {
-      const user = localStorage.getItem("user") || "User";
-      document.getElementById("username").textContent = user;
+    function loadUser() {
+      document.getElementById("userName").textContent = localStorage.getItem("user") || "User";
+      document.getElementById("score").textContent = localStorage.getItem("quizScore") || 0;
+      const avatar = localStorage.getItem("userAvatar");
+      if (avatar) document.getElementById("avatarPreview").src = avatar;
 
-      const savedColor = localStorage.getItem("themeColor");
-      if (savedColor) {
-        document.documentElement.style.setProperty('--primary', savedColor);
-        document.getElementById("themeSelect").value = savedColor;
-      }
+      const savedFont = localStorage.getItem("fontStyle");
+      const savedColor = localStorage.getItem("fontColor");
+      const savedSize = localStorage.getItem("fontSize");
 
-      const savedScore = localStorage.getItem("quizScore");
-      if (savedScore) {
-        document.getElementById("quizScore").textContent = savedScore;
-      }
-
-      showTip();
-      updateProgress();
-      checkWeeklyReminder();
+      if (savedFont) document.body.style.fontFamily = savedFont;
+      if (savedColor) document.body.style.color = savedColor;
+      if (savedSize) document.body.style.fontSize = savedSize + "px";
     }
-  </script></body>
+
+    window.onload = function () {
+      showTip();
+      renderChecklist();
+      loadUser();
+    };
+  </script>
+</body>
 </html>
