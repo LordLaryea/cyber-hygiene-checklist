@@ -1,162 +1,148 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
   <title>Cyber Hygiene Dashboard</title>
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#1976d2">
-  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    :root {
-      --bg-color: #f4f6f9;
-      --text-color: #000;
-      --box-bg: #fff;
-      --tip-bg: #e3f2fd;
-      --checklist-bg: #f9fbe7;
-    }[data-theme="dark"] {
-  --bg-color: #121212;
-  --text-color: #f5f5f5;
-  --box-bg: #1e1e1e;
-  --tip-bg: #263238;
-  --checklist-bg: #2c3e50;
-}
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #eaf3f8;
+      margin: 0;
+      padding: 20px;
+    }
 
-body {
-  font-family: Arial, sans-serif;
-  background-color: var(--bg-color);
-  color: var(--text-color);
-  margin: 0;
-  padding: 0;
-}
+    .dashboard {
+      max-width: 400px;
+      margin: auto;
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
 
-.box {
-  max-width: 95%;
-  width: 100%;
-  margin: 20px auto;
-  background: var(--box-bg);
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-}
+    h2, h3 {
+      margin-top: 0;
+      color: #1976d2;
+    }
 
-h1, h2 {
-  text-align: center;
-  font-size: 1.4rem;
-  margin-top: 10px;
-}
+    .tip {
+      background: #e3f2fd;
+      padding: 10px;
+      border-radius: 6px;
+      margin-bottom: 20px;
+      font-style: italic;
+    }
 
-.tip-box, .checklist-box {
-  margin-top: 20px;
-  padding: 15px;
-  border-radius: 10px;
-}
+    label {
+      display: block;
+      margin-bottom: 10px;
+      font-size: 16px;
+    }
 
-.tip-box {
-  background-color: var(--tip-bg);
-  text-align: center;
-}
+    input[type="checkbox"] {
+      margin-right: 10px;
+    }
 
-.checklist-box {
-  background-color: var(--checklist-bg);
-}
+    .progress-container {
+      margin-top: 15px;
+    }
 
-ul {
-  list-style: none;
-  padding-left: 0;
-}
+    progress {
+      width: 100%;
+      height: 20px;
+      margin-bottom: 10px;
+    }
 
-ul li {
-  margin-bottom: 12px;
-  font-size: 1rem;
-  display: flex;
-  align-items: center;
-}
+    .badge {
+      text-align: center;
+      font-size: 18px;
+      font-weight: bold;
+    }
 
-input[type="checkbox"] {
-  transform: scale(1.4);
-  margin-right: 12px;
-}
+    .buttons {
+      margin-top: 20px;
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+    }
 
-button {
-  width: 100%;
-  margin-top: 15px;
-  padding: 12px;
-  background-color: #1976d2;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-size: 1rem;
-  cursor: pointer;
-}
+    button {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      border-radius: 6px;
+      font-size: 14px;
+      cursor: pointer;
+    }
 
-button:hover {
-  background-color: #1565c0;
-}
+    .dark {
+      background-color: #121212;
+      color: white;
+    }
 
-.toggle-btn {
-  background-color: #444;
-  margin-bottom: 10px;
-}
-
+    .dark .dashboard {
+      background-color: #1e1e1e;
+      color: white;
+    }
   </style>
 </head>
 <body>
-  <div class="box">
-    <h1>Welcome, <span id="username">User</span> 👋</h1><div class="tip-box">
-  <h2>💡 Tip of the Day</h2>
-  <p id="tip">Loading tip...</p>
-</div>
+  <div class="dashboard">
+    <h2>Welcome, <span id="user"></span> 👋</h2>
+    <div class="tip">💡 Tip of the Day:<br>Don't reuse passwords across sites.</div>
 
-<div class="checklist-box">
-  <h2>🗓️ Weekly Cyber Hygiene Checklist</h2>
-  <ul id="checklist">
-    <li><label><input type="checkbox" data-day="Mon"> Change your password</label></li>
-    <li><label><input type="checkbox" data-day="Tue"> Backup important files</label></li>
-    <li><label><input type="checkbox" data-day="Wed"> Check for updates</label></li>
-    <li><label><input type="checkbox" data-day="Thu"> Clear browser cache</label></li>
-    <li><label><input type="checkbox" data-day="Fri"> Review settings</label></li>
-    <li><label><input type="checkbox" data-day="Sat"> Enable 2FA</label></li>
-    <li><label><input type="checkbox" data-day="Sun"> Scan for malware</label></li>
-  </ul>
-</div>
+    <h3>🛡 Your Weekly Cyber Checklist</h3>
+    <label><input type="checkbox" onchange="updateProgress()"> Change your password</label>
+    <label><input type="checkbox" onchange="updateProgress()"> Backup files</label>
+    <label><input type="checkbox" onchange="updateProgress()"> Scan for malware</label>
+    <label><input type="checkbox" onchange="updateProgress()"> Check emails carefully</label>
+    <label><input type="checkbox" onchange="updateProgress()"> Use strong, unique passwords</label>
+    <label><input type="checkbox" onchange="updateProgress()"> Avoid clicking unknown links</label>
 
-<button onclick="toggleTheme()" class="toggle-btn">🌙 Toggle Dark Mode</button>
-<button onclick="resetChecklist()">♻️ Reset Checklist</button>
-<button onclick="logout()">🚪 Logout</button>
+    <div class="progress-container">
+      <progress id="progressBar" value="0" max="100"></progress>
+      <div class="badge">🏅 Shield Level: None</div>
+    </div>
 
-  </div>  <script>
-    // Username
-    const user = localStorage.getItem("user");
-    document.getElementById("username").textContent = user || "Guest";
+    <div class="buttons">
+      <button onclick="toggleDarkMode()">🌙 Dark Mode</button>
+      <button onclick="resetChecklist()">♻️ Reset</button>
+      <button onclick="logout()">🚪 Logout</button>
+    </div>
+  </div>
 
-    // Tip of the Day
-    const tips = [
-      "Use strong, unique passwords.",
-      "Enable 2FA.",
-      "Avoid suspicious links.",
-      "Update your apps regularly.",
-      "Install antivirus software.",
-      "Backup your files.",
-      "Review privacy settings."
-    ];
-    const today = new Date().getDay();
-    document.getElementById("tip").textContent = tips[today];
+  <script>
+    const username = localStorage.getItem("user");
+    document.getElementById("user").textContent = username || "User";
 
-    // Checklist Save/Load
-    const checkboxes = document.querySelectorAll("#checklist input[type='checkbox']");
-    checkboxes.forEach(cb => {
-      const day = cb.getAttribute("data-day");
-      cb.checked = localStorage.getItem("checklist-" + day) === "true";
-      cb.addEventListener("change", () => {
-        localStorage.setItem("checklist-" + day, cb.checked);
-      });
-    });
+    function updateProgress() {
+      const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+      let checked = 0;
+      checkboxes.forEach(cb => { if (cb.checked) checked++; });
+
+      const percent = Math.round((checked / checkboxes.length) * 100);
+      document.getElementById("progressBar").value = percent;
+
+      const badge = document.querySelector(".badge");
+      if (percent === 100) {
+        badge.textContent = "🏅 Shield Level: Gold 🥇";
+      } else if (percent >= 50) {
+        badge.textContent = "🏅 Shield Level: Silver 🥈";
+      } else if (percent >= 1) {
+        badge.textContent = "🏅 Shield Level: Bronze 🥉";
+      } else {
+        badge.textContent = "🏅 Shield Level: None";
+      }
+    }
 
     function resetChecklist() {
-      checkboxes.forEach(cb => {
-        cb.checked = false;
-        localStorage.setItem("checklist-" + cb.getAttribute("data-day"), false);
-      });
-      alert("Checklist reset!");
+      document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+      updateProgress();
+    }
+
+    function toggleDarkMode() {
+      document.body.classList.toggle("dark");
     }
 
     function logout() {
@@ -164,30 +150,8 @@ button:hover {
       window.location.href = "index.html";
     }
 
-    // Theme toggle
-    function toggleTheme() {
-      const current = document.documentElement.getAttribute("data-theme");
-      const newTheme = current === "dark" ? "light" : "dark";
-      document.documentElement.setAttribute("data-theme", newTheme);
-      localStorage.setItem("theme", newTheme);
-    }
-
-    // Load saved theme
-    document.documentElement.setAttribute("data-theme", localStorage.getItem("theme") || "light");
-
-    // Daily popup reminder
-    const lastShown = localStorage.getItem("reminder-shown-date");
-    const todayDate = new Date().toDateString();
-    if (lastShown !== todayDate) {
-      alert("👀 Don't forget your cyber hygiene today!");
-      localStorage.setItem("reminder-shown-date", todayDate);
-    }
-
-    // Register service worker for PWA
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('service-worker.js')
-        .then(() => console.log("✅ Service Worker Registered"))
-        .catch(err => console.error("❌ Service Worker Error:", err));
-    }
-  </script></body>
+    // Restore saved checklist state (optional upgrade coming soon)
+    updateProgress();
+  </script>
+</body>
 </html>
